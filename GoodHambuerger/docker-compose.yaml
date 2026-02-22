@@ -1,0 +1,25 @@
+services:
+  good-hamburger-api:
+    build: .
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=goodhamburger;Username=user;Password=password
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    ports:
+      - "5500:5432" # Map external port 5500 to internal container port 5432
+    environment:
+      POSTGRES_DB: goodhamburger
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
